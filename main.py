@@ -18,6 +18,13 @@ class Isaac(commands.AutoShardedBot):
         super().__init__(*args, **kwargs)
         Terminal.display("Isaac Initialised.")
 
+    async def start(self, *args, **kwargs):
+        await super().start(*args, **kwargs)
+
+    async def close(self):
+        Terminal.display("Isaac Session Terminated.")
+        await super().close()
+
 bot = Isaac(
     intents = intents,
     command_prefix = "/",
