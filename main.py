@@ -1,16 +1,33 @@
+import asyncio
+
+from cool_utils import Terminal
+
+from discord import Intents
 from discord.ext import commands
 
 from internal import Internal as System
 
 Internal = System()
-Internal.load_config("./config.json")
-Internal.setup()
+asyncio.run(Internal.load_config("./config.json"))
+asyncio.run(Internal.setup())
+intents = Intents.all()
+intents.members = True
 
 class Isaac(commands.AutoShardedBot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        Terminal.display("Isaac Initialised.")
 
 bot = Isaac(
+    intents = intents,
+    command_prefix = "/",
+    case_insensitive = True,
     application_id = Internal.application_id
 )
 
+async def start_runtime():
+    await bot.start(Internal.token)
+    Terminal.display("Bot start invoked!")
+
+if __name__ == "__main__":
+    asyncio.run(start_runtime())
