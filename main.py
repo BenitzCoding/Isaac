@@ -1,3 +1,4 @@
+import os
 import asyncio
 
 from cool_utils import Terminal
@@ -24,6 +25,24 @@ class Isaac(commands.AutoShardedBot):
     async def close(self):
         Terminal.display("Isaac Session Terminated.")
         await super().close()
+
+    async def sync_application(self):
+        await self.tree.sync(guild = Internal.core_guild)
+        Terminal.display("Application synced successfully.")
+
+    async def setup_hook(self):
+        for filename in os.listdir("./plugins"):
+            if filename.endswith(".py"):
+                name = filename[:-3]
+                try:
+                    await self.load_extension(f"plugins.{name}")
+                except Exception as e:
+                    Terminal.error(f"Failed to load plugin {name}.")
+                    Terminal.error(e)
+                    continue
+                Terminal.display(f"Loaded extension {name}.")
+
+        self.loop.create_task(self.sync_application())
 
 bot = Isaac(
     intents = intents,
