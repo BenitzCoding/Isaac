@@ -11,7 +11,16 @@ class Internal:
     def error(self, error: Exception) -> None:
         Terminal.error(f"{error}")
 
+    def load_partial_config(self, file: str) -> None:
+        with open(file, 'r') as file_:
+            self.config = json.load(file_)
+            self.application_id = file_.get("application_id")
+            self.token = file_.get("token")
+
     async def load_config(self, file: str) -> None:
+        if self.bot is None:
+            raise ValueError("Bot is not connected to Discord API.")
+
         async with open(file, 'r') as file_:
             self.config = json.load(file_)
             self.application_id = self.config.get("application_id")

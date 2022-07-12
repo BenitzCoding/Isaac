@@ -9,7 +9,7 @@ from discord.ext import commands
 from internal import Internal as System
 
 Internal = System()
-asyncio.run(Internal.load_config("./config.json"))
+Internal.load_partial_config("./config.json")
 asyncio.run(Internal.setup())
 intents = Intents.all()
 intents.members = True
