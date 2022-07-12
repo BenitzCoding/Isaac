@@ -18,6 +18,7 @@ class Isaac(commands.AutoShardedBot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         Terminal.display("Isaac Initialised.")
+        self.Internal = Internal
 
     async def start(self, *args, **kwargs):
         await super().start(*args, **kwargs)
