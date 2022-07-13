@@ -7,6 +7,7 @@ class Internal:
         self.bot = None
         self.owner = None
         self.config = None
+        self.compromised = False
         self.application_id = None
         self.token = None
         self.threshold = None
