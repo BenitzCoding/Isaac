@@ -14,6 +14,7 @@ class Internal:
         self.join_channel = None
         self.ads_channel = None
         self.alerts_channel = None
+        self.errors_channel = None
 
     def pass_bot(self, bot):
         self.bot = bot
@@ -41,6 +42,7 @@ class Internal:
             self.join_channel = await self.bot.fetch_channel(self.config.get("join_channel"))
             self.ads_channel = self.config.get("ads_channel")
             self.alerts_channel = self.config.get("alerts_channel")
+            self.errors_channel = self.config.get("errors_channel")
     
     async def setup(self) -> None:
         if self.config is None:

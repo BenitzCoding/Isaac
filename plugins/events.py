@@ -16,3 +16,5 @@ class Events(Cog):
     async def message(self, message):
         if message.user != self.bot.user:
             return
+
+        
