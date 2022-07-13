@@ -9,6 +9,7 @@ class Internal:
         self.config = None
         self.application_id = None
         self.token = None
+        self.threshold = None
         self.core_guild = None
         self.message_channel = None
         self.join_channel = None
@@ -37,6 +38,7 @@ class Internal:
             self.owner = self.bot.get_user(self.config.get("owner"))
             self.application_id = self.config.get("application_id")
             self.token = self.config.get("token")
+            self.threshold = self.config.get("threshold")
             self.core_guild = await self.bot.fetch_channel(self.config.get("core_guild"))
             self.message_channel = await self.bot.fetch_channel(self.config.get("message_channel"))
             self.join_channel = await self.bot.fetch_channel(self.config.get("join_channel"))
