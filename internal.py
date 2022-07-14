@@ -1,4 +1,8 @@
+import sys
 import json
+import traceback
+
+from discord.ext.commands import CommandNotFound, BadArgument, MissingRequiredArgument
 
 from cool_utils import Terminal
 
@@ -21,14 +25,28 @@ class Internal:
     def pass_bot(self, bot):
         self.bot = bot
 
-    def error(self, error: Exception) -> None:
-        Terminal.error(f"{error}")
-
     def load_partial_config(self, file: str) -> None:
         with open(file, 'r') as file_:
             self.config = json.load(file_)
             self.application_id = file_.get("application_id")
             self.token = file_.get("token")
+
+    async def error(self, ctx, error: Exception) -> None:
+        ignored_exceptions = (CommandNotFound, BadArgument, MissingRequiredArgument)
+
+        if isinstance(error, ignored_exceptions):
+            return
+            
+        Terminal.error(f"-------")
+        Terminal.error(f"Ignoring exception in command {ctx.command}:", file = sys.stderr)
+        print("\033[91m")
+        traceback.print_exception(type(error), error, error.__traceback__, file = sys.stderr)
+        Terminal.error(f"-------")
+
+        channel = await self.bot.fetch_channel(self.errors_channel)
+        await channel.send(f"```py\nIgnoring exception in command {ctx.command}:\n{type(error)} {error} {error.__traceback__}\n```")
+
+        return
 
     async def load_config(self, file: str) -> None:
         if self.bot is None:
@@ -52,5 +70,4 @@ class Internal:
             raise ValueError("No Config files loaded.")
 
         Terminal.start_log()
-        Terminal.on_error(self.error)
         Terminal.display("Initiated Bot Setup.")

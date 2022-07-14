@@ -13,6 +13,10 @@ class Events(Cog):
         self.bot.Internal.load_config("./config.json")
         Terminal.display("Bot client has initialised.")
 
+    @Cog.listener("on_error")
+    async def error_handler(self, ctx, error):
+        self.bot.Internal.error(ctx, error)
+
     @Cog.listener("on_message")
     async def message_handler(self, message):
         if message.user != self.bot.user or message.guild is not None:
