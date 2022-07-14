@@ -15,7 +15,7 @@ class Events(Cog):
 
     @Cog.listener("on_error")
     async def error_handler(self, ctx, error):
-        self.bot.Internal.error(ctx, error)
+        await self.bot.Internal.error(ctx, error)
 
     @Cog.listener("on_message")
     async def message_handler(self, message):
