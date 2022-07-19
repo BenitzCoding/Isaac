@@ -88,3 +88,6 @@ class Events(Cog):
 				self.bot.Internal.block_user(owner.id)
 
 		await self.bot.Internal.join_channel.send(f"**Guild:** {guild.name} (`{guild.id}`) [Scanned guild]")
+
+async def setup(bot):
+	await bot.add_cog(Events(bot))
