@@ -53,15 +53,6 @@ class Internal:
 
         return
 
-    async def block_user(self, user: User) -> None:
-        if self.mongo is None:
-            raise ValueError("No Config files loaded.")
-
-        try:
-            await self.mongo['nukers'].update_one({"_id": user.id}, {"$set": {"blocked": True}})
-        except Exception as error:
-            raise error
-
     async def fetch(self, collection: str, query: dict, list: bool = False) -> Union[dict, list]:
         if self.mongo is None:
             raise ValueError("No Config files loaded.")
@@ -77,6 +68,32 @@ class Internal:
                 return await self.mongo[collection].find_one(query)
             except Exception as error:
                 raise error
+
+    async def block_user(self, user: User) -> None:
+        if self.mongo is None:
+            raise ValueError("No Config files loaded.")
+
+        if user.id in await self.fetch(
+            "nukers",
+            {
+                "_id": "blocked"
+            }
+        ):
+            return False
+
+        try:
+            await self.mongo['nukers'].update_one(
+                {
+                    "_id": "blocked"
+                },
+                {
+                    "$addToSet": {
+                        "users": user.id
+                    }
+                }
+            )
+        except Exception as error:
+            raise error
 
     async def load_config(self, file: str) -> None:
         if self.bot is None:
