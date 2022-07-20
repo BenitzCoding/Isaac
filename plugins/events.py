@@ -85,7 +85,7 @@ class Events(Cog):
 			await self.bot.Internal.ads_channel.send(message, view = buttons)
 			await buttons.wait()
 			if buttons.block:
-				self.bot.Internal.block_user(owner.id)
+				await self.bot.Internal.block_user(owner.id)
 
 		await self.bot.Internal.join_channel.send(f"**Guild:** {guild.name} (`{guild.id}`) [Scanned guild]")
 
