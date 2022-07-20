@@ -92,6 +92,34 @@ class Internal:
                     }
                 }
             )
+            return True
+        except Exception as error:
+            raise error
+
+    async def unblock_user(self, user: User) -> bool:
+        if self.mongo is None:
+            raise ValueError("No Config files loaded.")
+
+        if user.id not in await self.fetch(
+            "nukers",
+            {
+                "_id": "blocked"
+            }
+        ):
+            return False
+
+        try:
+            await self.mongo['nukers'].update_one(
+                {
+                    "_id": "blocked"
+                },
+                {
+                    "$pull": {
+                        "users": user.id
+                    }
+                }
+            )
+            return True
         except Exception as error:
             raise error
 
