@@ -2,6 +2,9 @@ import sys
 import json
 import traceback
 
+from motor.motor_asyncio import AsyncIOMotorClient
+
+from discord import User
 from discord.ext.commands import CommandNotFound, BadArgument, MissingRequiredArgument
 
 from cool_utils import Terminal
@@ -21,6 +24,7 @@ class Internal:
         self.ads_channel = None
         self.alerts_channel = None
         self.errors_channel = None
+        self.mongo = None
 
     def pass_bot(self, bot):
         self.bot = bot
@@ -48,6 +52,15 @@ class Internal:
 
         return
 
+    async def block_user(self, user: User) -> None:
+        if self.mongo is None:
+            raise ValueError("No Config files loaded.")
+
+        try:
+            await self.mongo['nukers'].update_one({"_id": user.id}, {"$set": {"blocked": True}})
+        except Exception as error:
+            raise error
+
     async def load_config(self, file: str) -> None:
         if self.bot is None:
             raise ValueError("Bot is not connected to Discord API.")
@@ -64,6 +77,7 @@ class Internal:
             self.ads_channel = self.config.get("ads_channel")
             self.alerts_channel = self.config.get("alerts_channel")
             self.errors_channel = self.config.get("errors_channel")
+            self.mongo = AsyncIOMotorClient(self.config.get("mongo"))['isaac']
     
     async def setup(self) -> None:
         if self.config is None:
