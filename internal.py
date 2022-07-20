@@ -3,6 +3,7 @@ import json
 import traceback
 
 from motor.motor_asyncio import AsyncIOMotorClient
+from typing import Union
 
 from discord import User
 from discord.ext.commands import CommandNotFound, BadArgument, MissingRequiredArgument
@@ -60,6 +61,22 @@ class Internal:
             await self.mongo['nukers'].update_one({"_id": user.id}, {"$set": {"blocked": True}})
         except Exception as error:
             raise error
+
+    async def fetch(self, collection: str, query: dict, list: bool = False) -> Union[dict, list]:
+        if self.mongo is None:
+            raise ValueError("No Config files loaded.")
+
+        if list:
+            try:
+                return await self.mongo[collection].find(query)
+            except Exception as error:
+                raise error
+
+        else:
+            try:
+                return await self.mongo[collection].find_one(query)
+            except Exception as error:
+                raise error
 
     async def load_config(self, file: str) -> None:
         if self.bot is None:
