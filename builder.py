@@ -7,9 +7,9 @@ from cool_utils import Terminal
 
 # class snowflake(int):
     
-def get_response() -> dict:
+def get_response(restart: bool = False) -> dict:
     Terminal.clear()
-    print(f"{'-' * 21}\n|{' ' * 6}OPTIONS{' ' * 6}|\n{'-' * 21}\n|{' ' * 6}1.Setup{' ' * 6}|\n|{' ' * 6}2.Run{' ' * 8}|\n|{' ' * 6}3.Exit{' ' * 7}|\n{'-' * 21}")
+    print(f"{'-' * 21}\n|{' ' * 6}OPTIONS{' ' * 6}|\n{'-' * 21}\n|{' ' * 6}1.Setup{' ' * 6}|\n|{' ' * 6}2.Run{' ' * 8}|\n|{' ' * 6}3.Exit{' ' * 7}|\n{'-' * 21}") if not restart else None
 
     try:
         option: int = input("Select the number to choose what you'd like to do. [>] ")
@@ -46,6 +46,10 @@ def get_response() -> dict:
             "type": "exit"
         }
 
+    else:
+        print("Invalid input.")
+        return get_response(True)
+
 def run():
     if not os.path.exists("config.json"):
         raise ValueError("No config file found.")
@@ -62,12 +66,15 @@ def main():
         write_config(response)
         run() if response['run'] else None
 
-    if response['type'] == "run":
+    elif response['type'] == "run":
         run()
 
     elif response['type'] == "exit":
         Terminal.clear()
         print("Exiting...")
         sys.exit(0)
+
+    else:
+        raise ValueError("Invalid response.")
 
 main() if __name__ == "__main__" else None
