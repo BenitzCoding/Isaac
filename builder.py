@@ -70,7 +70,6 @@ def main():
         run()
 
     elif response['type'] == "exit":
-        Terminal.clear()
         print("Exiting...")
         sys.exit(0)
 
