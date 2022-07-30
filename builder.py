@@ -1,10 +1,10 @@
 #!/usr/bin/python3
+import json
 
 from cool_utils import Terminal
 
-class snowflake(int):
+# class snowflake(int):
     
-
 def get_response() -> dict:
     Terminal.clear()
     print(f"{'-' * 21}\n|{' ' * 6}OPTIONS{' ' * 6}|\n{'-' * 21}\n|{' ' * 6}1.Setup{' ' * 6}|\n|{' ' * 6}2.Run{' ' * 8}|\n|{' ' * 6}3.Exit{' ' * 7}|\n{'-' * 21}")
@@ -22,5 +22,23 @@ def get_response() -> dict:
         webhook: str = input("Enter the alarts webhook url. [>] ")
         error_webook: str = input("Enter the error webhook url. [>] ")
 
+        return {
+            "type": "setup",
+            "token": token,
+            "mongo_url": mongo_url,
+            "core_guild": core_guild,
+            "owner": owner,
+            "webhook": webhook,
+            "error_webook": error_webook
+        }
 
-get_response()
+def write_config(data: dict) -> None:
+    with open("config.json", "w") as f:
+        f.write(json.dumps(data))
+
+def main():
+    response = get_response()
+    if response['type'] == "setup":
+        write_config(response)
+
+main() if __name__ == "__main__" else None
