@@ -36,6 +36,9 @@ def get_response() -> dict:
         }
 
 def run():
+    if not os.path.exists("config.json"):
+        raise ValueError("No config file found.")
+
     os.system("python3 main.py")
 
 def write_config(data: dict) -> None:
