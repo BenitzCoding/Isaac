@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+import os
 import json
 
 from cool_utils import Terminal
@@ -22,8 +23,10 @@ def get_response() -> dict:
         webhook: str = input("Enter the alarts webhook url. [>] ")
         error_webook: str = input("Enter the error webhook url. [>] ")
 
+        run: bool = input("Would you like to run the bot after setup? [Y/N] ")
         return {
             "type": "setup",
+            "run": run,
             "token": token,
             "mongo_url": mongo_url,
             "core_guild": core_guild,
@@ -31,6 +34,9 @@ def get_response() -> dict:
             "webhook": webhook,
             "error_webook": error_webook
         }
+
+def run():
+    os.system("python3 main.py")
 
 def write_config(data: dict) -> None:
     with open("config.json", "w") as f:
@@ -40,5 +46,6 @@ def main():
     response = get_response()
     if response['type'] == "setup":
         write_config(response)
+        run() if response['run'] else None
 
 main() if __name__ == "__main__" else None
