@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import os
+import sys
 import json
 
 from cool_utils import Terminal
@@ -35,6 +36,16 @@ def get_response() -> dict:
             "error_webook": error_webook
         }
 
+    elif option == 2:
+        return {
+            "type": "run"
+        }
+
+    elif option == 3:
+        return {
+            "type": "exit"
+        }
+
 def run():
     if not os.path.exists("config.json"):
         raise ValueError("No config file found.")
@@ -50,5 +61,13 @@ def main():
     if response['type'] == "setup":
         write_config(response)
         run() if response['run'] else None
+
+    if response['type'] == "run":
+        run()
+
+    elif response['type'] == "exit":
+        Terminal.clear()
+        print("Exiting...")
+        sys.exit(0)
 
 main() if __name__ == "__main__" else None
