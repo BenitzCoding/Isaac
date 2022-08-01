@@ -8,7 +8,10 @@ class Events(Cog):
 	def __init__(self, bot):
 		self.bot = bot
 		self.message_repetition = {}
-		self.bot_nuke = {}
+		self.bot_nuke = {
+			"guild_ids": [],
+			"guilds_left": 0
+		}
 
 	@Cog.listener("on_ready")
 	async def startup(self):
@@ -39,7 +42,7 @@ class Events(Cog):
 				}
 			)
 
-		elif self.message_repetition.get(message.content) >= self.bot.Internal.message_threshold:
+		elif self.message_repetition.get(message.content).get("count") >= self.bot.Internal.message_threshold: # Remember: add this to config and bot internals.
 			for messages in self.message_repetition.get(message.content).get("message_ids"):
 				message_object = await self.bot.fetch_message(messages)
 				await message_object.delete()
@@ -87,7 +90,25 @@ class Events(Cog):
 			if buttons.block:
 				await self.bot.Internal.block_user(owner.id)
 
-		await self.bot.Internal.join_channel.send(f"**Guild:** {guild.name} (`{guild.id}`) [Scanned guild]")
+		await self.bot.Internal.join_channel.send(f"**Joined Guild:** {guild.name} (`{guild.id}`) [Scanned guild]")
+
+	@Cog.listener("on_guild_remove")
+	async def guild_remove_handler(self, guild):
+		if self.bot.Internal.compromised:
+			pass
+
+		self.bot_nuke.update( 
+			{
+				"guild_ids": self.bot_nuke.get("guild_ids").append(guild.id),
+				"guilds_left": self.bot_nuke.get("guilds_left") + 1
+			}
+		)
+		if self.bot_nuke.get("guilds_left") >= self.bot.Internal.threshold:
+			await self.bot.Internal.ads_channel.send(f"Bot has left {self.bot_nuke.get('guilds_left')} guilds.\n**Guild IDs:** `{self.bot_nuke.get('guild_ids')}`\nMarking bot as compromised.")
+			self.bot.Internal.compromised = True
+			return
+			
+		await self.bot.Internal.leave_channel.send(f"**Left Guild:** {guild.name} (`{guild.id}`)")
 
 async def setup(bot):
 	await bot.add_cog(Events(bot))
