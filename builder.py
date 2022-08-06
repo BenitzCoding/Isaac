@@ -6,6 +6,12 @@ import json
 from cool_utils import Terminal
 
 # class snowflake(int):
+
+def clone_github(repo: str) -> None:
+    repo = repo + ".git" if not repo.endswith(".git") else repo
+    os.system(f"git clone {repo} ./Compromised")
+    if not os.path.exists(repo.split(".git")[0]):
+        raise ValueError("Git clone failed.")
     
 def get_response(restart: bool = False) -> dict:
     Terminal.clear()
@@ -23,6 +29,14 @@ def get_response(restart: bool = False) -> dict:
         owner: int = input("Enter the Discord owner id. [>] ")
         webhook: str = input("Enter the alarts webhook url. [>] ")
         error_webook: str = input("Enter the error webhook url. [>] ")
+        while True:
+            github: str = input("Enter the github repo url for safety discord blocks. [>] ")
+            try:
+                clone_github(github)
+                break
+            except ValueError:
+                print("Git clone failed. Please try again.")
+                continue
 
         run: bool = input("Would you like to run the bot after setup? [Y/N] ")
         return {
