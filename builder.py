@@ -34,12 +34,12 @@ def get_response(restart: bool = False) -> dict:
 		print("Invalid input.\nAbort.")
 
 	if option == 1:
-		token: str = input("Enter the bot token. [>] ")
-		mongo_url: str = input("Enter the MongoDB url. [>] ")
-		core_guild: int = input("Enter the core guild id. [>] ")
-		owner: int = input("Enter the Discord owner id. [>] ")
-		webhook: str = input("Enter the alarts webhook url. [>] ")
-		error_webook: str = input("Enter the error webhook url. [>] ")
+		token = input("Enter the bot token. [>] ")
+		mongo_url = input("Enter the MongoDB url. [>] ")
+		core_guild = input("Enter the core guild id. [>] ")
+		owner = int(input("Enter the Discord owner id. [>] "))
+		webhook = input("Enter the alarts webhook url. [>] ")
+		error_webook = input("Enter the error webhook url. [>] ")
 		while True:
 			github: str = input("Enter the github repo url for safety discord blocks. [>] ")
 			try:
