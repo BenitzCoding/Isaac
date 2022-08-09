@@ -55,6 +55,13 @@ class Internal:
             self.application_id = file_.get("application_id")
             self.token = file_.get("token")
 
+    async def rapid_compromised_checks(self):
+        while True:
+            if self.compromised:
+                await self.alerts_channel.send("Bot has been compromised, The Bot's token will now be leaked. please regenerate token when available.")
+                await self.bot.close()
+                sys.exit(1)
+
     async def error(self, ctx, error: Exception) -> None:
         ignored_exceptions = (CommandNotFound, BadArgument, MissingRequiredArgument)
 
