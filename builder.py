@@ -23,19 +23,13 @@ def clone_git(repo: str) -> None:
 		GIT.clone(repo)
 	except:
 		raise ValueError("Git clone failed.")
-
-def clone_github(repo: str) -> None:
-	repo = repo + ".git" if not repo.endswith(".git") else repo
-	os.system(f"git clone {repo} ./Compromised")
-	if not os.path.exists(repo.split(".git")[0]):
-		raise ValueError("Git clone failed.")
 	
 def get_response(restart: bool = False) -> dict:
 	Terminal.clear()
 	print(f"{'-' * 21}\n|{' ' * 6}OPTIONS{' ' * 6}|\n{'-' * 21}\n|{' ' * 6}1.Setup{' ' * 6}|\n|{' ' * 6}2.Run{' ' * 8}|\n|{' ' * 6}3.Exit{' ' * 7}|\n{'-' * 21}") if not restart else None
 
 	try:
-		option: int = input("Select the number to choose what you'd like to do. [>] ")
+		option = int(input("Select the number to choose what you'd like to do. [>] "))
 	except:
 		print("Invalid input.\nAbort.")
 
@@ -49,7 +43,7 @@ def get_response(restart: bool = False) -> dict:
 		while True:
 			github: str = input("Enter the github repo url for safety discord blocks. [>] ")
 			try:
-				clone_github(github)
+				clone_git(github)
 				break
 			except ValueError:
 				print("Git clone failed. Please try again.")
