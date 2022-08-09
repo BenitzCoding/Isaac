@@ -1,3 +1,4 @@
+import os
 import sys
 import json
 import traceback
@@ -8,7 +9,24 @@ from typing import Union
 from discord import User
 from discord.ext.commands import CommandNotFound, BadArgument, MissingRequiredArgument
 
+from git import Repo, Git
 from cool_utils import Terminal
+
+def clone_git(repo: str) -> None:
+    tree = ""
+    for folders in (os.getcwd() + __file__).split("/")[:-1]:
+        tree += f"/{folders}"
+
+    tree += "/Compromised"
+
+    if not repo.endswith(".git"):
+        repo += ".git"
+
+    GIT = Git(tree)
+    try:
+        GIT.clone(repo)
+    except:
+        raise ValueError("Git clone failed.")
 
 class Internal:
     def __init__(self):
@@ -42,7 +60,7 @@ class Internal:
 
         if isinstance(error, ignored_exceptions):
             return
-            
+
         Terminal.error(f"-------")
         Terminal.error(f"Ignoring exception in command {ctx.command}:", file = sys.stderr)
         print("\033[91m")
