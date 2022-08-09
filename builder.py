@@ -25,7 +25,7 @@ def clone_git(repo: str) -> None:
 		raise ValueError("Git clone failed.")
 	
 def get_response(restart: bool = False) -> dict:
-	Terminal.clear()
+	Terminal.clear() if not restart else None
 	print(f"{'-' * 21}\n|{' ' * 6}OPTIONS{' ' * 6}|\n{'-' * 21}\n|{' ' * 6}1.Setup{' ' * 6}|\n|{' ' * 6}2.Run{' ' * 8}|\n|{' ' * 6}3.Exit{' ' * 7}|\n{'-' * 21}") if not restart else None
 
 	try:
