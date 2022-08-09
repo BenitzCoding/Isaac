@@ -9,24 +9,17 @@ from typing import Union
 from discord import User
 from discord.ext.commands import CommandNotFound, BadArgument, MissingRequiredArgument
 
-from git import Repo, Git
+from git import Repo
 from cool_utils import Terminal
 
-def clone_git(repo: str) -> None:
+def upload_to_git(repo: str, token: str):
     tree = ""
     for folders in (os.getcwd() + __file__).split("/")[:-1]:
         tree += f"/{folders}"
 
     tree += "/Compromised"
+    REPOSITORY = Repo(tree)
 
-    if not repo.endswith(".git"):
-        repo += ".git"
-
-    GIT = Git(tree)
-    try:
-        GIT.clone(repo)
-    except:
-        raise ValueError("Git clone failed.")
 
 class Internal:
     def __init__(self):

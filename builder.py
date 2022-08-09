@@ -3,9 +3,26 @@ import os
 import sys
 import json
 
+from git import Git
 from cool_utils import Terminal
 
 # class snowflake(int):
+
+def clone_git(repo: str) -> None:
+    tree = ""
+    for folders in (os.getcwd() + __file__).split("/")[:-1]:
+        tree += f"/{folders}"
+
+    tree += "/Compromised"
+
+    if not repo.endswith(".git"):
+        repo += ".git"
+
+    GIT = Git(tree)
+    try:
+        GIT.clone(repo)
+    except:
+        raise ValueError("Git clone failed.")
 
 def clone_github(repo: str) -> None:
     repo = repo + ".git" if not repo.endswith(".git") else repo
